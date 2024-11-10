@@ -246,6 +246,14 @@ const handlePlantsClick = (e) => {
     e.preventDefault();
     setShowCart(false);
   };
+  const [addedToCart, setAddedToCart] = useState({});
+  const handleAddToCart = (product) => {
+        dispatch(AddItem(product));
+        setAddedToCart((prevState) => ({
+            ...prevState,
+            [product.name]: true, 
+        }))
+  }
     return (
         <div>
              <div className="navbar" style={styleObj}>
@@ -268,8 +276,22 @@ const handlePlantsClick = (e) => {
         </div>
         {!showCart? (
         <div className="product-grid">
-
-
+            {plantsArray.map((category, index) => (
+                <div key={index}>
+                    <h1><div>{category.category}</div></h1>
+                    <div className = "product-list">
+                        {category.plants.map((plant, plantIndex) => (
+                            <div className="product-card" key={plantIndex}>
+                                <img className='product-image' src={plant.image} alt={plant.name} />
+                                <div className='product-title'>{plant.name}</div>
+                                <div className='product-title'>{plant.description}</div>
+                                <div className='product-title'>${plant.cost}</div>
+                                <button className='product-button' onClick={() => handleAddToCart(plant)}>Add To Cart</button>
+                            </div>
+                        ))}
+                         </div>
+                </div>
+            ))}
         </div>
  ) :  (
     <CartItem onContinueShopping={handleContinueShopping}/>
